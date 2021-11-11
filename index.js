@@ -21,13 +21,34 @@ async function run() {
         const database = client.db("bestTreadmillHome");
         const products = database.collection("products");
         const reviews = database.collection("reviews");
-        // create a document to insert
-        const doc = {
-            title: "Afif Ahmed",
-            content: "You are NIce",
-        }
-        // const result = await reviews.insertOne(doc);
-        console.log(`A document was inserted with the _id: ${result.insertedId}`);
+        const orders = database.collection("orders");
+
+
+        app.get('/products', async (req, res) => {
+            const query = products.find({});
+            const cursor = await query.toArray();
+            res.send(cursor);
+            console.log("product get successfully");
+        })
+
+        app.get('/reviews', async (req, res) => {
+            const query = reviews.find({});
+            const cursor = await query.toArray();
+            res.send(cursor);
+            console.log("review get successfully");
+        })
+
+
+        app.post('/orders', async (req, res) => {
+            const newOrder = req.body;
+            const result = await orders.insertOne(newOrder);
+            console.log("got new order", req.body);
+            console.log("added order", result);
+            res.json(result);
+            console.log('orders received')
+        });
+
+
     } finally {
         // await client.close();
     }
