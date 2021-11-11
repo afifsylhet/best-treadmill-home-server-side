@@ -22,6 +22,7 @@ async function run() {
         const products = database.collection("products");
         const reviews = database.collection("reviews");
         const orders = database.collection("orders");
+        const users = database.collection("users");
 
 
         app.get('/products', async (req, res) => {
@@ -46,6 +47,16 @@ async function run() {
             console.log("added order", result);
             res.json(result);
             console.log('orders received')
+        });
+
+
+        app.post('/users', async (req, res) => {
+            const newUser = req.body;
+            const result = await users.insertOne(newUser);
+            console.log("got new user", req.body);
+            console.log("added user", result);
+            res.json(result);
+            console.log('user received')
         });
 
 
