@@ -4,6 +4,8 @@ const port = process.env.PORT || 5000;
 const cors = require('cors')
 const { MongoClient } = require('mongodb');
 require('dotenv').config()
+const ObjectID = require('mongodb').ObjectID
+
 
 
 app.use(cors());
@@ -39,6 +41,13 @@ async function run() {
             console.log("review get successfully");
         })
 
+        app.get('/orders', async (req, res) => {
+            const query = orders.find({});
+            const cursor = await query.toArray();
+            res.send(cursor);
+            console.log("orders get successfully");
+        })
+
 
         app.post('/orders', async (req, res) => {
             const newOrder = req.body;
@@ -57,6 +66,44 @@ async function run() {
             console.log("added user", result);
             res.json(result);
             console.log('user received')
+        });
+
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviews.insertOne(review);
+            console.log(result);
+            res.json(result);
+        });
+
+        app.delete('/orders', async (req, res) => {
+            const id = req.body._id;
+            console.log(id);
+            const query = { _id: ObjectID(id) };
+            const result = await orders.deleteOne(query);
+            res.json(result)
+            console.log('Your Order Deleted Successfully', result)
+        })
+
+
+
+        app.put('/orders', async (req, res) => {
+            const id = req.body._id;
+            console.log(id);
+            const query = { _id: id };
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set:
+                {
+                    status: "Approved"
+                }
+
+            };
+
+            const result = await orders.updateOne(query, updateDoc);
+            // console.log("got new user", req.body);
+            console.log("package approved", result);
+            res.json(result);
         });
 
 
