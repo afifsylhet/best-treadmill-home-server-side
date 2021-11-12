@@ -75,6 +75,13 @@ async function run() {
             res.json(result);
         });
 
+        app.post('/products', async (req, res) => {
+            const newProduct = req.body;
+            const result = await products.insertOne(newProduct);
+            console.log(result);
+            res.json(result);
+        });
+
         app.delete('/orders', async (req, res) => {
             const id = req.body._id;
             console.log(id);
