@@ -48,6 +48,13 @@ async function run() {
             console.log("orders get successfully");
         })
 
+        app.get('/users', async (req, res) => {
+            const query = users.find({});
+            const cursor = await query.toArray();
+            res.send(cursor);
+            console.log("orders get successfully");
+        })
+
 
         app.post('/orders', async (req, res) => {
             const newOrder = req.body;
@@ -90,6 +97,14 @@ async function run() {
             res.json(result)
             console.log('Your Order Deleted Successfully', result)
         })
+        app.delete('/products', async (req, res) => {
+            const id = req.body._id;
+            console.log(id);
+            const query = { _id: ObjectID(id) };
+            const result = await products.deleteOne(query);
+            res.json(result)
+            console.log('Product Deleted Successfully', result)
+        })
 
 
 
@@ -108,6 +123,26 @@ async function run() {
             };
 
             const result = await orders.updateOne(query, updateDoc);
+            // console.log("got new user", req.body);
+            console.log("package approved", result);
+            res.json(result);
+        });
+
+        app.put('/users', async (req, res) => {
+            const id = req.body._id;
+            console.log(id);
+            const query = { _id: ObjectID(id) };
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set:
+                {
+                    role: "Admin"
+                }
+
+            };
+
+            const result = await users.updateOne(query, updateDoc);
             // console.log("got new user", req.body);
             console.log("package approved", result);
             res.json(result);
