@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
     res.send("Hi Node js active for this project")
 })
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.a3ykp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster01.joqm4ye.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 async function run() {
     try {
